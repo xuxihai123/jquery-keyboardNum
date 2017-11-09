@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="zh-CN" v-app="ibsapp">
+
+<head>
+    <!-- 编码格式是utf-8 -->
+    <meta charset="utf-8">
+    <!-- 使用chrome渲染，没有chrome使用最高版本的IE -->
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <!-- 屏幕逻辑宽度与等于设备宽度，初始缩放比例为1,用户不可以缩放比例,最大放大比例，最小缩放比例-->
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no,maximum-scale=1" />
+    <!-- 数字不当做电话拨出去 禁止邮件自动跳转-->
+    <meta name="format-detection" content="telephone=no" />
+    <meta name="format-detection" content="email=no" />
+    <!-- seo字段 -->
+    <meta name="Keywords" content="MADP产品，移动银行，手机银行" />
+    <meta name="description" content="MADP产品，移动银行，手机银行" />
+    <title>VX客户端混合开发产品原型-适用于MADP产品/信息流平台</title>
+    <link href="keyboard.css" rel="stylesheet">
+    <style>
+        * {
+            padding: 0px;
+            margin: 0px;
+        }
+        #keybord1 {
+            height: 32px;
+            line-height: 32px;
+            font-size: 24px;
+            width: 220px;
+            /*padding: 0px 6px;*/
+        }
+    </style>
+</head>
+
+<body>
+
+<div style="width: 100%;padding: 20px 30px;">
+    <input id="keybord1" />
+
+</div>
+<!-- jquery引用 -->
+<script type="text/javascript" src="js/jquery-1.11.1.min.js"></script>
+<script src="js/jquery-keybord.js"></script>
+
+<script>
+    $('#keybord1').keyboardNum();
+</script>
+</body>
+
+</html>

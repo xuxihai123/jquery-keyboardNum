@@ -1,0 +1,80 @@
+.keyboard-cursor {
+    position: absolute;
+    width: 0px;
+    z-index: 20;
+    display: none;
+    border: 1px solid rgb(58, 122, 182);
+}
+
+
+.keyboard-container {
+    display: none;
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 1000;
+    width: 100%;
+    height: 193px;
+    font-size: 15px;
+    background-color: #fff;
+}
+.keyboard-arrow{
+    width: 100%;
+    height: 32px;
+    text-align: center;
+    line-height: 32px;
+    border-radius: 3px;
+    cursor: pointer;
+    border: 1px solid #ddd;
+}
+
+/*下箭头*/
+.bottom-arrow1,.bottom-arrow2{
+    width:0;
+    height:0;
+    display:block;
+    position:absolute;
+    left:47%;
+    margin-top: 3%;
+    z-index: 5;/*兼容ie8-*/
+    border-bottom:10px transparent dashed;
+    border-left:10px transparent dashed;
+    border-right:10px transparent dashed;
+    border-top:10px white solid;
+    overflow:hidden;
+}
+.bottom-arrow1{
+    top:1px;/*重要*/
+    border-top:10px #6e7479 solid;
+}
+.bottom-arrow2{
+    border-top:10px #8ca5bd solid;
+}
+
+.keyboard-container .keyboard-table {
+    text-align: center;
+    width: 100%;
+    height: 160px;
+    border-top: 1px solid #CECDCE;
+    border-collapse: collapse;
+    background-color: #FFF;
+}
+
+.keyboard-table td {
+    width: 33%;
+    border: 1px solid #ddd;
+    vertical-align: middle;
+}
+
+.keyboard-table td:hover {
+    background-color: #8ca5bd;
+}
+
+.keyboard-table .special {
+    background-color: #D3D9DF;
+}
+
+.keyboard-table .special:hover {
+    background-color: #8ca5bd;
+}
