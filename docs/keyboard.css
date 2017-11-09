@@ -67,14 +67,11 @@
     vertical-align: middle;
 }
 
-.keyboard-table td:hover {
-    background-color: #8ca5bd;
+
+.keyboard-table .pressed {
+    background-color: #8ca5bd!important;
 }
 
 .keyboard-table .special {
     background-color: #D3D9DF;
-}
-
-.keyboard-table .special:hover {
-    background-color: #8ca5bd;
 }
