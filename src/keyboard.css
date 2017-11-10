@@ -1,9 +1,10 @@
 .keyboard-cursor {
     position: absolute;
-    width: 0px;
     z-index: 20;
     display: none;
-    border: 1px solid rgb(58, 122, 182);
+    width: 1.5px;
+    background-color: darkgray;
+    border: 0px;
 }
 
 

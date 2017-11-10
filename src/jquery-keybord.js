@@ -40,6 +40,7 @@
             '</div>');
 
         $(element).attr('readonly', 'true');
+        document.activeElement.blur();
         $(document.body).append(this.$cursor);
         $(document.body).append(this.$keyboardDiv);
 
@@ -57,9 +58,12 @@
         this.$inputBox.borderTop = parseFloat($inputEl.css('border-top'));
         this.$inputBox.paddingTop = parseFloat($inputEl.css('padding-top'));
         var textSize = this.getTextSize('1234567890');
+        var inputContentHeight = $inputEl[0].clientHeight;
+        var offsetY = (inputContentHeight- textSize.height)/2;
+        console.log(offsetY);
         this.$cursor.css({
-            height: textSize.height + 'px',
-            top: (this.$inputBox.top  + this.$inputBox.borderTop + this.$inputBox.paddingTop) + 'px'
+            height: textSize.height  + 'px',
+            top: (this.$inputBox.top  + this.$inputBox.borderTop + this.$inputBox.paddingTop+offsetY) + 'px'
         });
     };
     KeybordInput.prototype.setCursorPos = function () {
@@ -67,7 +71,7 @@
         var inputEl = this.$input;
         var offset = 0, viewValue = inputEl.value, leftString,textSize;
         var $inputBox = this.$inputBox;
-
+        document.activeElement.blur();
         inputEl.setSelectionRange(cursorPos, cursorPos);
         if (cursorPos == 0) {
             offset = 0;
@@ -94,10 +98,10 @@
             this.disableCursor();
         }
         this.$clearInterval = setInterval(function flicker() {
-            if ($cursor.css('border') == "1px solid rgb(58, 122, 182)") {
-                $cursor.css('border', "0px");
+            if ($cursor.css('display') == "block") {
+                $cursor.hide();
             } else {
-                $cursor.css('border', "1px solid rgb(58, 122, 182)");
+                $cursor.show();
             }
         }, tick);
     };
@@ -113,6 +117,7 @@
             this.$baseTextSpan = $('<span></span>');
             $inputEl.parent().append(this.$baseTextSpan);
             this.$baseTextSpan.css({
+                position: "absolute",
                 visibility: "hidden",
                 whiteSpace: "nowrap",
                 fontFamily: fontFamily,
