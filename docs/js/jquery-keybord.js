@@ -1,11 +1,15 @@
 ;(function (window, $) {
     var MODE_REGEXP = /^(\d+)(\.(\d+))?$/;
     var NUMBER_REGEXP = /^\d+(\.\d*)?$/;
+    var isTouch = ("ontouchstart" in document.documentElement) ? true : false;
 
     var defaults = {
-        intLength: 12,
-        dotLength: 2,
-        cursorTick:800,
+        intLength: 12, //整数位数
+        dotLength: 2, //小数位数
+        cursorTick:800, //光标闪烁频率
+        onChangeAfter:$.noop, //渲染值后的一个回调
+        validateHook:undefined, //校验成功后才会渲染值
+        mode:undefined //like 8.2 ==> intLength:8,dotLength:2
     };
 
     function KeybordInput(element, options) {
@@ -52,12 +56,28 @@
         this.$inputBox.top = offset.top;
         this.$inputBox.borderTop = parseFloat($inputEl.css('border-top'));
         this.$inputBox.paddingTop = parseFloat($inputEl.css('padding-top'));
-        var borderBottom = parseFloat($inputEl.css('border-bottom'));
-        var paddingBottom = parseFloat($inputEl.css('padding-bottom'));
+        var textSize = this.getTextSize('1234567890');
         this.$cursor.css({
-            height: ($inputEl[0].offsetHeight - borderBottom - paddingBottom - ( this.$inputBox.borderTop + this.$inputBox.paddingTop)) + 'px',
+            height: textSize.height + 'px',
             top: (this.$inputBox.top  + this.$inputBox.borderTop + this.$inputBox.paddingTop) + 'px'
         });
+    };
+    KeybordInput.prototype.setCursorPos = function () {
+        var cursorPos = this.$cursorPosition;
+        var inputEl = this.$input;
+        var offset = 0, viewValue = inputEl.value, leftString,textSize;
+        var $inputBox = this.$inputBox;
+
+        inputEl.setSelectionRange(cursorPos, cursorPos);
+        if (cursorPos == 0) {
+            offset = 0;
+        } else {
+            leftString = viewValue.slice(0, cursorPos);
+            textSize = this.getTextSize(leftString);
+            offset = textSize.width;
+        }
+        console.log('setCurPos-->x: left:' + $inputBox.left + ',border-left:' + $inputBox.borderLeft + ',padding-left:' + $inputBox.paddingLeft + ',offset:' + offset);
+        this.$cursor.css('left', ($inputBox.left  + $inputBox.borderLeft + $inputBox.paddingLeft + offset) + 'px');
     };
     KeybordInput.prototype.getCursorPos = function () {//获得input光标位置
         var oTxt1 = this.$input;
@@ -67,7 +87,6 @@
         }
         return cursurPosition;
     };
-
     KeybordInput.prototype.enableCursor = function () {
         var tick = this.$options.cursorTick;
         var $cursor = this.$cursor;
@@ -86,7 +105,7 @@
         clearInterval(this.$clearInterval);
         this.$clearInterval = null;
     };
-    KeybordInput.prototype.getTextWidth = function (str) {
+    KeybordInput.prototype.getTextSize = function (str) {
         var $inputEl = $(this.$input);
         if (!this.$baseTextSpan) {
             var fontSize = $inputEl.css('font-size');
@@ -101,33 +120,41 @@
             });
         }
         this.$baseTextSpan.text(str);
-        return this.$baseTextSpan[0].offsetWidth;
+        return {
+            width:this.$baseTextSpan[0].offsetWidth,
+            height:this.$baseTextSpan[0].offsetHeight
+        };
     };
-    KeybordInput.prototype.render = function (viewValue) {
+    KeybordInput.prototype.enable = function () {
+        this.$cursor.show();
+        this.$keyboardDiv.show();
+        this.$keyboardDiv.enable = true;
+    };
+    KeybordInput.prototype.disable = function () {
+        this.$cursor.hide();
+        this.$keyboardDiv.hide();
+        this.$keyboardDiv.enable = false;
+    };
+    KeybordInput.prototype._render = function (viewValue) {
         this.$viewValue = viewValue;
         this.$input.value = viewValue;
-    };
-    KeybordInput.prototype.setCursorPos = function () {
-        var cursorPos = this.$cursorPosition;
-        var inputEl = this.$input;
-        var offset = 0, viewValue = inputEl.value, leftString;
-        var $inputBox = this.$inputBox;
-
-        inputEl.setSelectionRange(cursorPos, cursorPos);
-        if (cursorPos == 0) {
-            offset = 0;
-        } else {
-            leftString = viewValue.slice(0, cursorPos);
-            offset = this.getTextWidth(leftString);
-        }
-        console.log('setCurPos-->x: left:' + $inputBox.left + ',border-left:' + $inputBox.borderLeft + ',padding-left:' + $inputBox.paddingLeft + ',offset:' + offset);
-        this.$cursor.css('left', ($inputBox.left  + $inputBox.borderLeft + $inputBox.paddingLeft + offset) + 'px');
+        var onchangeCall = this.$options.onChangeAfter;
+        onchangeCall.apply(this, [viewValue]);
     };
     KeybordInput.prototype._destory = function () {
-        console.log('destory...');
+        var $inputEl = $(this.$input);
+        $inputEl.unbind('click.keyboard');
+        $(document.body).unbind('disable.keyboard');
+        this.$keyboardDiv.unbind('.keyboard-table td',isTouch ? "touchstart" : "mousedown");
+        this.$keyboardDiv.unbind('.keyboard-table td',isTouch ? "touchend" : "mouseup");
+        this.$cursor.remove();
+        this.$keyboardDiv.remove();
     };
-    KeybordInput.prototype.validateValue = function (inputValue) {
+    KeybordInput.prototype._validate = function (inputValue) {
         var options = this.$options, result = true;
+        if(typeof options.validateHook=='function'){ //使用自定义的校验规则
+            return options.validateHook.apply(this, [inputValue]);
+        }
         if(inputValue==''){
             return result;
         }
@@ -145,17 +172,17 @@
                 result = false;
             }
         }else{
-	        result = false;
+            result = false;
         }
         return result;
     };
     KeybordInput.prototype._handleKeyValue = function (keyValue) {
         var inputValue = this.$input.value, newValue;
-        if (keyValue === '删除') {
+        if (keyValue === '删除'&&this.$cursorPosition>0) {
             if (inputValue && inputValue.length > 0) {
                 newValue = inputValue.substr(0, this.$cursorPosition - 1) + inputValue.substr(this.$cursorPosition, inputValue.length);
-                if (this.validateValue(newValue)) {
-                    this.render(newValue);
+                if (this._validate(newValue)) {
+                    this._render(newValue);
                     this.$cursorPosition--;//光标前移
                     this.setCursorPos();
                 }
@@ -166,27 +193,29 @@
             } else {
                 newValue = keyValue;
             }
-            if (this.validateValue(newValue)) {
-                this.render(newValue);
+            if (this._validate(newValue)) {
+                this._render(newValue);
                 this.$cursorPosition++;//光标后移
                 this.setCursorPos();
             }
         }
     };
     KeybordInput.prototype._bindEvent = function () {
-        var isTouch = ("ontouchstart" in document.documentElement) ? true : false;
         var self = this;
         var $inputEl = $(this.$input);
         var keyboard = this.$keyboardDiv;
         $inputEl.bind('click.keyboard', function (event) {
             if (!self.$keyboardDiv.enable) {
-                self.$cursor.show();
-                self.$keyboardDiv.show();
-                self.$keyboardDiv.enable = true;
+                $(document.body).trigger('disable.keyboard');
+                self.enable();
             }
-            self.$cursorPosition = self.getCursorPos('start');
+            self.$cursorPosition = self.getCursorPos();
             self.setCursorPos();
             self.enableCursor();
+        });
+        $(document.body).bind('disable.keyboard', function (event) {
+            self.disable();
+            self.disableCursor();
         });
         keyboard.delegate('.keyboard-arrow', 'click', function (event) { //关闭键盘
             self.$cursor.hide();
@@ -211,6 +240,7 @@
                 instance = inputElement.data(dataKey);
             if (instance && instance._destory) {
                 instance._destory();
+                inputElement.removeData(dataKey);
             }
             instance = new KeybordInput(this, options);
             inputElement.data(dataKey, instance);
