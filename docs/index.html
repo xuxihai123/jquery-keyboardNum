@@ -4,13 +4,21 @@
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no,maximum-scale=1"/>
+    <meta name="viewport" content="width=device-width, user-scalable=no">
     <title>jquery-keyboard-num-input</title>
     <link href="keyboard.css" rel="stylesheet">
     <style>
+        body {
+            width: 100%;
+            height: 100%;
+        }
         * {
             padding: 0px;
             margin: 0px;
+        }
+        .container{
+            width: auto;
+            padding: 20px 30px;
         }
         input{
             height: 32px;
@@ -39,18 +47,19 @@
 
 <body>
 
-<a href="https://github.com/x373241884y/jquery-keyboardNum">Github</a>
-
-<div style="padding: 20px 30px;">
+<div>
+    <a href="https://github.com/x373241884y/jquery-keyboardNum">Github</a>
+</div>
+<div class="container">
     <input id="keybord1"/>
 </div>
-<div style="padding: 20px 30px;">
+<div class="container">
     <input id="keybord2"/>
 </div>
-<div style="padding: 20px 30px;">
+<div class="container">
     <input id="keybord3"/>
 </div>
-<div style="padding: 20px 30px;">
+<div class="container">
     <input id="keybord4"/>
 </div>
 <div id="result"></div>
