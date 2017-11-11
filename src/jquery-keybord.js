@@ -134,8 +134,8 @@
     };
     KeybordInput.prototype.$getTextSize = function (str) {
         var $inputEl = $(this.$input);
+        var fontSize = $inputEl.css('font-size');
         if (!this.$baseTextSpan) {
-            var fontSize = $inputEl.css('font-size');
             var fontFamily = $inputEl.css('font-family');
             this.$baseTextSpan = $('<span></span>');
             $inputEl.parent().append(this.$baseTextSpan);
