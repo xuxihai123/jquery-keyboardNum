@@ -116,7 +116,7 @@
         var borderTop = parseFloat($inputEl.css('border-top'));
         var paddingTop = parseFloat($inputEl.css('padding-top'));
         var inputContentHeight = $inputEl[0].clientHeight;
-        var offsetY = (inputContentHeight - textSize.height) / 2;
+        var offsetY = (inputContentHeight - textSize.fontSize) / 2;
 
         document.activeElement.blur(); //IOS..
         $inputEl[0].setSelectionRange(cursorPos, cursorPos);
@@ -126,7 +126,7 @@
         keybordEnv.setCursorPos({
             top: (offset.top + borderTop + paddingTop + offsetY) + 'px',
             left: (offset.left + borderLeft + paddingLeft + textWidth) + 'px',
-            height: textSize.height + 'px'
+            height: textSize.fontSize + 'px'
         });
     };
     KeybordInput.prototype.$getCursorPos = function () {//获得input光标位置
@@ -151,7 +151,7 @@
         return {
             width: this.$baseTextSpan[0].offsetWidth,
             height: this.$baseTextSpan[0].offsetHeight,
-            // fontSize:parseFloat(fontSize)
+            fontSize:parseFloat(fontSize)
         };
     };
     KeybordInput.prototype.$render = function (viewValue) {
