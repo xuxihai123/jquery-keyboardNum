@@ -55,6 +55,7 @@
             });
             $keybord.delegate('.keyboard-table [key]', isTouch ? "touchstart" : "mousedown", function (event) {
                 $(this).addClass('pressed');
+                event.preventDefault(); //resolve IOS click闪烁
             });
             $keybord.delegate('.keyboard-table [key]', isTouch ? "touchend" : "mouseup", function (event) {
                 $(this).removeClass('pressed');
