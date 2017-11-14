@@ -1,3 +1,9 @@
+/**
+ * jquery-keybord 
+ * version: v0.0.1 
+ * repo: https://github.com/x373241884y/jquery-keyboardNum 
+ * build: 2017-11-14 14:17:21
+ */
 ;(function (window, $) {
     var MODE_REGEXP = /^(\d+)(\.(\d+))?$/;
     var NUMBER_REGEXP = /^\d+(\.\d*)?$/;

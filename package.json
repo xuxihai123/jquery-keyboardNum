@@ -2,11 +2,16 @@
   "name": "jquery-keyboardNum",
   "version": "v0.0.1",
   "author": "x373241884y <x373241884y@gmail.com>",
+  "scripts": {
+    "watch":"gulp watch",
+    "build":"gulp build"
+  },
   "devDependencies": {
     "del": "^1.1.1",
     "event-stream": "^3.2.2",
     "gulp": "^3.9.1",
     "gulp-beautify": "^2.0.1",
+    "gulp-clean-css": "^3.9.0",
     "gulp-concat": "^2.4.3",
     "gulp-header": "^1.8.9",
     "gulp-jshint": "^1.9.2",
