@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="zh-CN" v-app="ibsapp">
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <meta name="viewport" content="width=device-width, user-scalable=no" />
+    <title>jquery-keyboard-num-input</title>
+
+    <link href="./jquery-keybord.css" rel="stylesheet" />
+    <style>
+      body {
+        width: 100%;
+        height: 100%;
+      }
+      * {
+        padding: 0px;
+        margin: 0px;
+      }
+      .container {
+        width: auto;
+        padding: 20px 30px;
+      }
+      input {
+        height: 32px;
+        line-height: 32px;
+        width: 220px;
+        padding: 0px 6px;
+        margin: 3px 6px;
+      }
+      #keybord1 {
+        font-size: 28px;
+      }
+
+      #keybord2 {
+        font-size: 24px;
+      }
+
+      #keybord3 {
+        font-size: 18px;
+      }
+      #keybord4 {
+        font-size: 16px;
+      }
+    </style>
+  </head>
+
+  <body>
+    <div>
+      <a href="https://github.com/x373241884y/jquery-keyboardNum">Github</a>
+    </div>
+    <div class="container">
+      <input id="keybord1" />
+    </div>
+    <div class="container">
+      <input id="keybord2" />
+    </div>
+    <div class="container">
+      <input id="keybord3" />
+    </div>
+    <div class="container">
+      <input id="keybord4" />
+    </div>
+    <div id="result"></div>
+    <!-- jquery引用 -->
+    <script type="text/javascript" src="./jquery-1.11.1.min.js"></script>
+    <script src="./jquery-keybord.js"></script>
+
+    <script>
+      $("#keybord1").keyboardNum();
+      $("#keybord2").keyboardNum({
+        mode: "8.2", //数字格式限制
+        cursorTick: 1000, //闪烁间隔,
+        onChangeAfter: function (value) {
+          console.log(value);
+          $("#result").text("keybord2:" + value);
+          console.log(this);
+        },
+      });
+      $("#keybord3").keyboardNum({
+        mode: "10.2", //数字格式限制
+        validateHook: function (value) {
+          if (/^\d+$/.test(value)) {
+            return true;
+          }
+        },
+      });
+      $("#keybord4").keyboardNum({
+        intLength: 9, //整数位数
+        dotLength: 2, //小数位数
+      });
+    </script>
+  </body>
+</html>
