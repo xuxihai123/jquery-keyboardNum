@@ -49,15 +49,19 @@
       <a href="https://github.com/x373241884y/jquery-keyboardNum">Github</a>
     </div>
     <div class="container">
+      <div>默认12位整数和2位小数</div>
       <input id="keybord1" />
     </div>
     <div class="container">
+      <div>8位整数和2位小数</div>
       <input id="keybord2" />
     </div>
     <div class="container">
+      <div>6位整数</div>
       <input id="keybord3" />
     </div>
     <div class="container">
+      <div>9位整数和2位小数</div>
       <input id="keybord4" />
     </div>
     <div id="result"></div>
@@ -77,9 +81,10 @@
         },
       });
       $("#keybord3").keyboardNum({
-        mode: "10.2", //数字格式限制
         validateHook: function (value) {
-          if (/^\d+$/.test(value)) {
+          if(/^\d+$/.test(value)&&value.length>6){
+            return false;
+          }else if (/^\d+$/.test(value)) {
             return true;
           }
         },

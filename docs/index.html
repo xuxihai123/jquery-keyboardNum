@@ -52,45 +52,50 @@
     <a href="https://github.com/x373241884y/jquery-keyboardNum">Github</a>
 </div>
 <div class="container">
-    <input id="keybord1"/>
-</div>
-<div class="container">
-    <input id="keybord2"/>
-</div>
-<div class="container">
-    <input id="keybord3"/>
-</div>
-<div class="container">
-    <input id="keybord4"/>
-</div>
+    <div>默认12位整数和2位小数</div>
+    <input id="keybord1" />
+  </div>
+  <div class="container">
+    <div>8位整数和2位小数</div>
+    <input id="keybord2" />
+  </div>
+  <div class="container">
+    <div>6位整数</div>
+    <input id="keybord3" />
+  </div>
+  <div class="container">
+    <div>9位整数和2位小数</div>
+    <input id="keybord4" />
+  </div>
 <div id="result"></div>
 <!-- jquery引用 -->
 <script type="text/javascript" src="js/jquery-1.11.1.min.js"></script>
 <script src="js/jquery-keybord.js"></script>
 
 <script>
-    $('#keybord1').keyboardNum();
-    $('#keybord2').keyboardNum({
-        mode: '8.2', //数字格式限制
+        $("#keybord1").keyboardNum();
+      $("#keybord2").keyboardNum({
+        mode: "8.2", //数字格式限制
         cursorTick: 1000, //闪烁间隔,
         onChangeAfter: function (value) {
-            console.log(value);
-            $("#result").text('keybord2:' + value);
-            console.log(this);
-        }
-    });
-    $('#keybord3').keyboardNum({
-        mode: '10.2', //数字格式限制
+          console.log(value);
+          $("#result").text("keybord2:" + value);
+          console.log(this);
+        },
+      });
+      $("#keybord3").keyboardNum({
         validateHook: function (value) {
-            if (/^\d+$/.test(value)) {
-                return true;
-            }
-        }
-    });
-    $('#keybord4').keyboardNum({
+          if(/^\d+$/.test(value)&&value.length>6){
+            return false;
+          }else if (/^\d+$/.test(value)) {
+            return true;
+          }
+        },
+      });
+      $("#keybord4").keyboardNum({
         intLength: 9, //整数位数
         dotLength: 2, //小数位数
-    });
+      });
 </script>
 </body>
 
